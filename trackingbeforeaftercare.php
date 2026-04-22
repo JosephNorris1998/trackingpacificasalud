@@ -3,7 +3,7 @@
  * Plugin Name: Tracking Pacifica Salud – Click Button Counter
  * Plugin URI:  https://github.com/JosephNorris1998/trackingpacificasalud
  * Description: Crea botones personalizados con contador de clics. Compatible con LiteSpeed Cache. Usa shortcodes para mostrar los botones en cualquier página o entrada.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Joseph Norris
  * Text Domain: tps-click-counter
  * License:     GPL-2.0-or-later
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-define( 'TPS_CC_VERSION',  '1.0.0' );
+define( 'TPS_CC_VERSION',  '1.1.0' );
 define( 'TPS_CC_DIR',      plugin_dir_path( __FILE__ ) );
 define( 'TPS_CC_URL',      plugin_dir_url( __FILE__ ) );
 define( 'TPS_CC_DB_TABLE', 'tps_click_buttons' );
@@ -48,6 +48,7 @@ function tps_cc_create_table() {
         btn_width     VARCHAR(20)         NOT NULL DEFAULT 'auto',
         btn_padding   VARCHAR(40)         NOT NULL DEFAULT '12px 24px',
         border_radius SMALLINT(5) UNSIGNED NOT NULL DEFAULT 4,
+        btn_align     VARCHAR(10)         NOT NULL DEFAULT 'center',
         click_count   BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
         created_at    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id)
@@ -200,8 +201,11 @@ function tps_cc_shortcode( $atts ) {
         (int) $button->border_radius
     );
 
+    $align = in_array( $button->btn_align, array( 'left', 'center', 'right' ), true ) ? $button->btn_align : 'center';
+
     return sprintf(
-        '<button class="tps-cc-btn" data-id="%d" style="%s">%s</button>',
+        '<div style="text-align:%s;"><button class="tps-cc-btn" data-id="%d" style="%s">%s</button></div>',
+        esc_attr( $align ),
         (int) $button->id,
         $style,
         esc_html( $button->button_label )
@@ -236,6 +240,10 @@ function tps_cc_ajax_save_button() {
     $btn_width    = isset( $_POST['btn_width'] )    ? sanitize_text_field( $_POST['btn_width'] )    : 'auto';
     $btn_padding  = isset( $_POST['btn_padding'] )  ? sanitize_text_field( $_POST['btn_padding'] )  : '12px 24px';
     $border_radius = isset( $_POST['border_radius'] ) ? absint( $_POST['border_radius'] )           : 4;
+    $btn_align    = isset( $_POST['btn_align'] )    ? sanitize_text_field( $_POST['btn_align'] )    : 'center';
+    if ( ! in_array( $btn_align, array( 'left', 'center', 'right' ), true ) ) {
+        $btn_align = 'center';
+    }
 
     if ( empty( $button_name ) || empty( $button_label ) ) {
         wp_send_json_error( array( 'message' => 'Nombre y etiqueta son obligatorios.' ) );
@@ -250,8 +258,9 @@ function tps_cc_ajax_save_button() {
         'btn_width'     => $btn_width,
         'btn_padding'   => $btn_padding,
         'border_radius' => $border_radius,
+        'btn_align'     => $btn_align,
     );
-    $formats = array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d' );
+    $formats = array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s' );
 
     if ( $id ) {
         $wpdb->update( $table, $data, array( 'id' => $id ), $formats, array( '%d' ) );
