@@ -47,7 +47,6 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                         <th style="width:50px"><?php esc_html_e( 'ID', 'tps-click-counter' ); ?></th>
                         <th><?php esc_html_e( 'Nombre interno', 'tps-click-counter' ); ?></th>
                         <th><?php esc_html_e( 'Etiqueta del botón', 'tps-click-counter' ); ?></th>
-                        <th style="width:100px"><?php esc_html_e( 'Vista previa', 'tps-click-counter' ); ?></th>
                         <th style="width:90px"><?php esc_html_e( 'Clics', 'tps-click-counter' ); ?></th>
                         <th style="width:220px"><?php esc_html_e( 'Shortcode', 'tps-click-counter' ); ?></th>
                         <th style="width:200px"><?php esc_html_e( 'Acciones', 'tps-click-counter' ); ?></th>
@@ -59,15 +58,6 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                         <td><?php echo (int) $btn->id; ?></td>
                         <td><?php echo esc_html( $btn->button_name ); ?></td>
                         <td><?php echo esc_html( $btn->button_label ); ?></td>
-                        <td>
-                            <span class="tps-cc-preview-btn" style="
-                                background-color:<?php echo esc_attr( $btn->bg_color ); ?>;
-                                color:<?php echo esc_attr( $btn->text_color ); ?>;
-                                font-size:<?php echo (int) $btn->font_size; ?>px;
-                                padding:<?php echo esc_attr( $btn->btn_padding ); ?>;
-                                border-radius:<?php echo (int) $btn->border_radius; ?>px;
-                            "><?php echo esc_html( $btn->button_label ); ?></span>
-                        </td>
                         <td class="tps-cc-count" id="tps-cc-count-<?php echo (int) $btn->id; ?>">
                             <?php echo number_format_i18n( (int) $btn->click_count ); ?>
                         </td>
@@ -152,6 +142,15 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                             <label for="tps-cc-btn-padding"><?php esc_html_e( 'Padding (ej: 12px 24px)', 'tps-click-counter' ); ?></label>
                             <input type="text" id="tps-cc-btn-padding" name="btn_padding" class="regular-text" value="12px 24px">
                         </div>
+                    </div>
+
+                    <div class="tps-cc-field">
+                        <label for="tps-cc-btn-align"><?php esc_html_e( 'Alineación del botón', 'tps-click-counter' ); ?></label>
+                        <select id="tps-cc-btn-align" name="btn_align" class="regular-text">
+                            <option value="left"><?php esc_html_e( 'Izquierda', 'tps-click-counter' ); ?></option>
+                            <option value="center" selected><?php esc_html_e( 'Centro', 'tps-click-counter' ); ?></option>
+                            <option value="right"><?php esc_html_e( 'Derecha', 'tps-click-counter' ); ?></option>
+                        </select>
                     </div>
 
                     <!-- Live preview -->
