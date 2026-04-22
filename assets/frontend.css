@@ -1,0 +1,113 @@
+/* ── Tracking Pacifica Salud – Frontend Styles ── */
+
+/* Confirmation modal overlay */
+.tps-cc-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: tpsCCFadeIn .18s ease;
+}
+.tps-cc-confirm-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 32px 28px 24px;
+    max-width: 360px;
+    width: 90vw;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+    animation: tpsCCSlideUp .2s ease;
+}
+.tps-cc-confirm-box p {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 22px;
+    color: #1d2327;
+    line-height: 1.5;
+}
+.tps-cc-confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+.tps-cc-confirm-yes,
+.tps-cc-confirm-no {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+}
+.tps-cc-confirm-yes:hover,
+.tps-cc-confirm-no:hover {
+    opacity: .88;
+    transform: translateY(-1px);
+}
+.tps-cc-confirm-yes {
+    background: #0073aa;
+    color: #fff;
+}
+.tps-cc-confirm-no {
+    background: #e0e0e0;
+    color: #1d2327;
+}
+
+/* Thank-you toast */
+.tps-cc-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: #1d2327;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 99999;
+    box-shadow: 0 4px 16px rgba(0,0,0,.28);
+    animation: tpsCCToastIn .3s ease, tpsCCToastOut .4s ease 2.2s forwards;
+}
+
+@keyframes tpsCCFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes tpsCCSlideUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes tpsCCToastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes tpsCCToastOut {
+    to   { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}
+
+/* The shortcode button itself */
+button.tps-cc-btn {
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: filter .15s, transform .1s;
+    display: inline-block;
+}
+button.tps-cc-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+button.tps-cc-btn:active {
+    transform: translateY(0);
+}
+button.tps-cc-btn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+    transform: none;
+}
