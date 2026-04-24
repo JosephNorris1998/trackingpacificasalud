@@ -68,10 +68,9 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                         <td>
                             <?php
                             $shortcode_str = '[tps_click_button id="' . (int) $btn->id . '"]';
-                            $align_val     = in_array( $btn->btn_align, array( 'left', 'center', 'right' ), true ) ? $btn->btn_align : 'center';
                             $html_snippet  = sprintf(
                                 '<div style="text-align:%s;"><button type="button" class="tps-cc-btn" data-id="%d" style="background-color:%s;color:%s;font-size:%dpx;width:%s;padding:%s;border-radius:%dpx;">%s</button></div>',
-                                $align_val,
+                                'center',
                                 (int) $btn->id,
                                 esc_attr( $btn->bg_color ),
                                 esc_attr( $btn->text_color ),
@@ -168,15 +167,6 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                             <label for="tps-cc-btn-padding"><?php esc_html_e( 'Padding (ej: 12px 24px)', 'tps-click-counter' ); ?></label>
                             <input type="text" id="tps-cc-btn-padding" name="btn_padding" class="regular-text" value="12px 24px">
                         </div>
-                    </div>
-
-                    <div class="tps-cc-field">
-                        <label for="tps-cc-btn-align"><?php esc_html_e( 'Alineación del botón', 'tps-click-counter' ); ?></label>
-                        <select id="tps-cc-btn-align" name="btn_align" class="regular-text">
-                            <option value="left"><?php esc_html_e( 'Izquierda', 'tps-click-counter' ); ?></option>
-                            <option value="center" selected><?php esc_html_e( 'Centro', 'tps-click-counter' ); ?></option>
-                            <option value="right"><?php esc_html_e( 'Derecha', 'tps-click-counter' ); ?></option>
-                        </select>
                     </div>
 
                     <!-- Live preview -->

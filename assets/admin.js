@@ -72,7 +72,6 @@
                 $('#tps-cc-bg-color').wpColorPicker('color', '#0073aa');
                 $('#tps-cc-text-color').wpColorPicker('color', '#ffffff');
             }
-            $('#tps-cc-btn-align').val('center');
             updateLivePreview();
             openModal('Nuevo botón');
         });
@@ -100,7 +99,6 @@
                     $('#tps-cc-btn-width').val(b.btn_width);
                     $('#tps-cc-btn-padding').val(b.btn_padding);
                     $('#tps-cc-border-radius').val(b.border_radius);
-                    $('#tps-cc-btn-align').val(b.btn_align || 'center');
                     updateLivePreview();
                     openModal('Editar botón #' + b.id);
                 }
