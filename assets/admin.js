@@ -196,16 +196,24 @@
             });
         });
 
-        // ── Copy shortcode ────────────────────────────────────────────────────
+        // ── Copy shortcode / HTML ─────────────────────────────────────────────
 
         $(document).on('click', '.tps-cc-copy-btn', function () {
-            var sc = $(this).data('shortcode');
+            var code = $(this).data('code');
+            var type = $(this).data('type') || 'shortcode';
+            var successMsg = type === 'html'
+                ? '✅ HTML copiado al portapapeles.'
+                : '✅ Shortcode copiado al portapapeles:\n' + code;
+
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(sc).then(function () {
-                    alert('✅ Shortcode copiado al portapapeles:\n' + sc);
+                navigator.clipboard.writeText(code).then(function () {
+                    alert(successMsg);
                 });
             } else {
-                window.prompt('Copia este shortcode:', sc);
+                window.prompt(
+                    type === 'html' ? 'Copia este código HTML:' : 'Copia este shortcode:',
+                    code
+                );
             }
         });
 
