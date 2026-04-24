@@ -107,13 +107,14 @@ function tps_cc_admin_enqueue( $hook ) {
 // ─── Frontend Enqueue ─────────────────────────────────────────────────────────
 add_action( 'wp_enqueue_scripts', 'tps_cc_frontend_enqueue' );
 function tps_cc_frontend_enqueue() {
-    wp_register_style(
+    // Always enqueue so buttons added via HTML (not just shortcode) work on any page.
+    wp_enqueue_style(
         'tps-cc-frontend',
         TPS_CC_URL . 'assets/frontend.css',
         array(),
         TPS_CC_VERSION
     );
-    wp_register_script(
+    wp_enqueue_script(
         'tps-cc-frontend',
         TPS_CC_URL . 'assets/frontend.js',
         array( 'jquery' ),
@@ -187,10 +188,6 @@ function tps_cc_shortcode( $atts ) {
         return '';
     }
 
-    // Enqueue assets only when shortcode is used
-    wp_enqueue_style( 'tps-cc-frontend' );
-    wp_enqueue_script( 'tps-cc-frontend' );
-
     $style = sprintf(
         'background-color:%s;color:%s;font-size:%dpx;width:%s;padding:%s;border-radius:%dpx;',
         esc_attr( $button->bg_color ),
@@ -204,7 +201,7 @@ function tps_cc_shortcode( $atts ) {
     $align = in_array( $button->btn_align, array( 'left', 'center', 'right' ), true ) ? $button->btn_align : 'center';
 
     return sprintf(
-        '<div style="text-align:%s;"><button class="tps-cc-btn" data-id="%d" style="%s">%s</button></div>',
+        '<div style="text-align:%s;"><button type="button" class="tps-cc-btn" data-id="%d" style="%s">%s</button></div>',
         esc_attr( $align ),
         (int) $button->id,
         $style,
@@ -234,8 +231,8 @@ function tps_cc_ajax_save_button() {
     $id           = isset( $_POST['id'] )           ? absint( $_POST['id'] )                    : 0;
     $button_name  = isset( $_POST['button_name'] )  ? sanitize_text_field( $_POST['button_name'] )  : '';
     $button_label = isset( $_POST['button_label'] ) ? sanitize_text_field( $_POST['button_label'] ) : '';
-    $bg_color     = isset( $_POST['bg_color'] )     ? sanitize_hex_color( $_POST['bg_color'] )      : '#0073aa';
-    $text_color   = isset( $_POST['text_color'] )   ? sanitize_hex_color( $_POST['text_color'] )    : '#ffffff';
+    $bg_color     = isset( $_POST['bg_color'] )     ? ( sanitize_hex_color( $_POST['bg_color'] )   ?: '#0073aa' ) : '#0073aa';
+    $text_color   = isset( $_POST['text_color'] )   ? ( sanitize_hex_color( $_POST['text_color'] ) ?: '#ffffff' ) : '#ffffff';
     $font_size    = isset( $_POST['font_size'] )    ? absint( $_POST['font_size'] )                 : 16;
     $btn_width    = isset( $_POST['btn_width'] )    ? sanitize_text_field( $_POST['btn_width'] )    : 'auto';
     $btn_padding  = isset( $_POST['btn_padding'] )  ? sanitize_text_field( $_POST['btn_padding'] )  : '12px 24px';
@@ -263,12 +260,18 @@ function tps_cc_ajax_save_button() {
     $formats = array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s' );
 
     if ( $id ) {
-        $wpdb->update( $table, $data, array( 'id' => $id ), $formats, array( '%d' ) );
+        $result = $wpdb->update( $table, $data, array( 'id' => $id ), $formats, array( '%d' ) );
+        if ( false === $result ) {
+            wp_send_json_error( array( 'message' => 'Error al actualizar en la base de datos.' . ( $wpdb->last_error ? ' ' . $wpdb->last_error : '' ) ) );
+        }
         wp_send_json_success( array( 'id' => $id, 'action' => 'updated' ) );
     } else {
         $data['click_count'] = 0;
         $formats[]           = '%d';
-        $wpdb->insert( $table, $data, $formats );
+        $result = $wpdb->insert( $table, $data, $formats );
+        if ( false === $result ) {
+            wp_send_json_error( array( 'message' => 'Error al guardar en la base de datos.' . ( $wpdb->last_error ? ' ' . $wpdb->last_error : '' ) ) );
+        }
         wp_send_json_success( array( 'id' => $wpdb->insert_id, 'action' => 'created' ) );
     }
 }

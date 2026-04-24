@@ -17,12 +17,16 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
 
     <!-- ── Shortcode Guide ──────────────────────────────────── -->
     <div class="tps-cc-info-box">
-        <h2><?php esc_html_e( '📌 ¿Cómo usar los shortcodes?', 'tps-click-counter' ); ?></h2>
-        <p><?php esc_html_e( 'Copia el shortcode que aparece en la columna "Shortcode" de la tabla y pégalo en cualquier página, entrada o widget de bloques (bloque "Shortcode").', 'tps-click-counter' ); ?></p>
-        <p><strong><?php esc_html_e( 'Formato:', 'tps-click-counter' ); ?></strong>
-            <code>[tps_click_button id="X"]</code> —
-            <?php esc_html_e( 'donde X es el ID del botón.', 'tps-click-counter' ); ?>
+        <h2><?php esc_html_e( '📌 ¿Cómo insertar los botones?', 'tps-click-counter' ); ?></h2>
+        <p><strong><?php esc_html_e( 'Opción 1 – Shortcode:', 'tps-click-counter' ); ?></strong>
+            <?php esc_html_e( 'Pega el shortcode en cualquier página, entrada o widget de bloques (bloque "Shortcode").', 'tps-click-counter' ); ?><br>
+            <code>[tps_click_button id="X"]</code>
         </p>
+        <p><strong><?php esc_html_e( 'Opción 2 – HTML:', 'tps-click-counter' ); ?></strong>
+            <?php esc_html_e( 'Pega el código HTML en un bloque "HTML personalizado" en el editor de Gutenberg, en cualquier campo HTML o en widgets de texto.', 'tps-click-counter' ); ?><br>
+            <code>&lt;button class="tps-cc-btn" data-id="X" style="..."&gt;Etiqueta&lt;/button&gt;</code>
+        </p>
+        <p><?php esc_html_e( 'Copia el código que necesites desde la columna "Código embed" de la tabla.', 'tps-click-counter' ); ?></p>
     </div>
 
     <!-- ── Button Table ─────────────────────────────────────── -->
@@ -48,7 +52,7 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                         <th><?php esc_html_e( 'Nombre interno', 'tps-click-counter' ); ?></th>
                         <th><?php esc_html_e( 'Etiqueta del botón', 'tps-click-counter' ); ?></th>
                         <th style="width:90px"><?php esc_html_e( 'Clics', 'tps-click-counter' ); ?></th>
-                        <th style="width:220px"><?php esc_html_e( 'Shortcode', 'tps-click-counter' ); ?></th>
+                        <th style="width:260px"><?php esc_html_e( 'Código embed', 'tps-click-counter' ); ?></th>
                         <th style="width:200px"><?php esc_html_e( 'Acciones', 'tps-click-counter' ); ?></th>
                     </tr>
                 </thead>
@@ -62,10 +66,32 @@ $nonce   = wp_create_nonce( 'tps_cc_admin_nonce' );
                             <?php echo number_format_i18n( (int) $btn->click_count ); ?>
                         </td>
                         <td>
-                            <code class="tps-cc-shortcode-code">[tps_click_button id=&quot;<?php echo (int) $btn->id; ?>&quot;]</code>
-                            <button class="button tps-cc-copy-btn" data-shortcode='[tps_click_button id="<?php echo (int) $btn->id; ?>"]'>
-                                📋
-                            </button>
+                            <?php
+                            $shortcode_str = '[tps_click_button id="' . (int) $btn->id . '"]';
+                            $align_val     = in_array( $btn->btn_align, array( 'left', 'center', 'right' ), true ) ? $btn->btn_align : 'center';
+                            $html_snippet  = sprintf(
+                                '<div style="text-align:%s;"><button type="button" class="tps-cc-btn" data-id="%d" style="background-color:%s;color:%s;font-size:%dpx;width:%s;padding:%s;border-radius:%dpx;">%s</button></div>',
+                                $align_val,
+                                (int) $btn->id,
+                                esc_attr( $btn->bg_color ),
+                                esc_attr( $btn->text_color ),
+                                (int) $btn->font_size,
+                                esc_attr( $btn->btn_width ),
+                                esc_attr( $btn->btn_padding ),
+                                (int) $btn->border_radius,
+                                esc_html( $btn->button_label )
+                            );
+                            ?>
+                            <div class="tps-cc-embed-row">
+                                <span class="tps-cc-embed-label"><?php esc_html_e( 'SC:', 'tps-click-counter' ); ?></span>
+                                <code class="tps-cc-shortcode-code"><?php echo esc_html( $shortcode_str ); ?></code>
+                                <button class="button tps-cc-copy-btn" data-code="<?php echo esc_attr( $shortcode_str ); ?>" data-type="shortcode" title="<?php esc_attr_e( 'Copiar shortcode', 'tps-click-counter' ); ?>">📋</button>
+                            </div>
+                            <div class="tps-cc-embed-row">
+                                <span class="tps-cc-embed-label"><?php esc_html_e( 'HTML:', 'tps-click-counter' ); ?></span>
+                                <code class="tps-cc-shortcode-code">&lt;button class=&quot;tps-cc-btn&quot; data-id=&quot;<?php echo (int) $btn->id; ?>&quot;&gt;…&lt;/button&gt;</code>
+                                <button class="button tps-cc-copy-btn" data-code="<?php echo esc_attr( $html_snippet ); ?>" data-type="html" title="<?php esc_attr_e( 'Copiar HTML', 'tps-click-counter' ); ?>">📋</button>
+                            </div>
                         </td>
                         <td>
                             <button class="button tps-cc-edit-btn" data-id="<?php echo (int) $btn->id; ?>">
