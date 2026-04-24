@@ -199,11 +199,9 @@ function tps_cc_shortcode( $atts ) {
         (int) $button->border_radius
     );
 
-    $align = in_array( $button->btn_align, array( 'left', 'center', 'right' ), true ) ? $button->btn_align : 'center';
-
     return sprintf(
         '<div style="text-align:%s;"><button type="button" class="tps-cc-btn" data-id="%d" style="%s">%s</button></div>',
-        esc_attr( $align ),
+        'center',
         (int) $button->id,
         $style,
         esc_html( $button->button_label )
@@ -238,11 +236,6 @@ function tps_cc_ajax_save_button() {
     $btn_width    = isset( $_POST['btn_width'] )    ? sanitize_text_field( $_POST['btn_width'] )    : 'auto';
     $btn_padding  = isset( $_POST['btn_padding'] )  ? sanitize_text_field( $_POST['btn_padding'] )  : '12px 24px';
     $border_radius = isset( $_POST['border_radius'] ) ? absint( $_POST['border_radius'] )           : 4;
-    $btn_align    = isset( $_POST['btn_align'] )    ? sanitize_text_field( $_POST['btn_align'] )    : 'center';
-    if ( ! in_array( $btn_align, array( 'left', 'center', 'right' ), true ) ) {
-        $btn_align = 'center';
-    }
-
     if ( empty( $button_name ) || empty( $button_label ) ) {
         wp_send_json_error( array( 'message' => 'Nombre y etiqueta son obligatorios.' ) );
     }
@@ -256,9 +249,8 @@ function tps_cc_ajax_save_button() {
         'btn_width'     => $btn_width,
         'btn_padding'   => $btn_padding,
         'border_radius' => $border_radius,
-        'btn_align'     => $btn_align,
     );
-    $formats = array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s' );
+    $formats = array( '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d' );
 
     if ( $id ) {
         $result = $wpdb->update( $table, $data, array( 'id' => $id ), $formats, array( '%d' ) );
