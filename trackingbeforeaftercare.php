@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 define( 'TPS_CC_VERSION',    '1.2.0' );
-define( 'TPS_CC_DB_VERSION', '1.2.1' ); // Bump when schema changes
+define( 'TPS_CC_DB_VERSION', '1.3.0' ); // Bump when schema changes
 define( 'TPS_CC_DIR',        plugin_dir_path( __FILE__ ) );
 define( 'TPS_CC_URL',        plugin_dir_url( __FILE__ ) );
 define( 'TPS_CC_DB_TABLE',   'tps_click_buttons' );
