@@ -14,10 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-define( 'TPS_CC_VERSION',  '1.2.0' );
-define( 'TPS_CC_DIR',      plugin_dir_path( __FILE__ ) );
-define( 'TPS_CC_URL',      plugin_dir_url( __FILE__ ) );
-define( 'TPS_CC_DB_TABLE', 'tps_click_buttons' );
+define( 'TPS_CC_VERSION',    '1.2.0' );
+define( 'TPS_CC_DB_VERSION', '1.2.1' ); // Bump when schema changes
+define( 'TPS_CC_DIR',        plugin_dir_path( __FILE__ ) );
+define( 'TPS_CC_URL',        plugin_dir_url( __FILE__ ) );
+define( 'TPS_CC_DB_TABLE',   'tps_click_buttons' );
 
 // ─── Activation / Deactivation ────────────────────────────────────────────────
 register_activation_hook( __FILE__,   'tps_cc_activate' );
@@ -57,13 +58,13 @@ function tps_cc_create_table() {
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     dbDelta( $sql );
 
-    update_option( 'tps_cc_db_version', TPS_CC_VERSION );
+    update_option( 'tps_cc_db_version', TPS_CC_DB_VERSION );
 }
 
 // Run dbDelta on plugin update
 add_action( 'plugins_loaded', 'tps_cc_maybe_upgrade_db' );
 function tps_cc_maybe_upgrade_db() {
-    if ( get_option( 'tps_cc_db_version' ) !== TPS_CC_VERSION ) {
+    if ( get_option( 'tps_cc_db_version' ) !== TPS_CC_DB_VERSION ) {
         tps_cc_create_table();
     }
 }
