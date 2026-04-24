@@ -3,7 +3,7 @@
  * Plugin Name: Tracking Pacifica Salud – Click Button Counter
  * Plugin URI:  https://github.com/JosephNorris1998/trackingpacificasalud
  * Description: Crea botones personalizados con contador de clics. Compatible con LiteSpeed Cache. Usa shortcodes para mostrar los botones en cualquier página o entrada.
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      Joseph Norris
  * Text Domain: tps-click-counter
  * License:     GPL-2.0-or-later
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-define( 'TPS_CC_VERSION',  '1.1.0' );
+define( 'TPS_CC_VERSION',  '1.2.0' );
 define( 'TPS_CC_DIR',      plugin_dir_path( __FILE__ ) );
 define( 'TPS_CC_URL',      plugin_dir_url( __FILE__ ) );
 define( 'TPS_CC_DB_TABLE', 'tps_click_buttons' );
